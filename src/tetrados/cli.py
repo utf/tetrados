@@ -1,6 +1,7 @@
 """
 This module contains a script for using tetrados from the command line.
 """
+import logging
 import warnings
 
 import click
@@ -35,7 +36,10 @@ zero_weighted_type = click.Choice(["keep", "drop", "prefer"], case_sensitive=Fal
     "--estep", default=0.005, type=float, show_default=True, help="energy step in eV"
 )
 @click.option("-p", "--plot", default=False, is_flag=True, help="plot new vs old dos")
-def tetrados(vasprun, zero_weighted_kpoints, symprec, time_reversal, estep, plot):
+@click.option("-v", "--verbose", default=False, is_flag=True, help="verbose output")
+def tetrados(
+    vasprun, zero_weighted_kpoints, symprec, time_reversal, estep, plot, verbose
+):
     """Generate a tetrahedron DOS from a normal DOS."""
     import sys
 
@@ -51,6 +55,12 @@ def tetrados(vasprun, zero_weighted_kpoints, symprec, time_reversal, estep, plot
     )
     from tetrados.symmetry import expand_bandstructure
     from tetrados.tetrahedron import TetrahedralBandStructure
+
+    if verbose:
+        log = logging.getLogger("tetrados")
+        log.setLevel(logging.DEBUG)
+        log.handlers = []  # reset logging handlers if they already exist
+        log.addHandler(logging.StreamHandler(stream=sys.stdout))
 
     vasprun = Vasprun(vasprun)
 

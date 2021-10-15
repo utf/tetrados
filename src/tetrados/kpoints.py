@@ -1,5 +1,5 @@
 import logging
-from typing import List, Tuple, Union
+from typing import List, Tuple
 
 import numpy as np
 from pymatgen.core.structure import Structure
@@ -42,7 +42,7 @@ def kpoints_to_first_bz(
 
 
 def get_kpoints_tetrahedral(
-    kpoint_mesh: Union[float, List[int]],
+    kpoint_mesh: List[int],
     structure: Structure,
     symprec: float = symprec,
     time_reversal_symmetry: bool = True,
@@ -54,11 +54,6 @@ def get_kpoints_tetrahedral(
 
     Args:
         kpoint_mesh: The k-point mesh as a 1x3 array. E.g.,``[6, 6, 6]``.
-            Alternatively, if a single value is provided this will be
-            treated as a k-point spacing cut-off and the k-points will be generated
-            automatically.  Cutoff is length in Angstroms and corresponds to
-            non-overlapping radius in a hypothetical supercell (Moreno-Soler length
-            cutoff).
         structure: A structure.
         symprec: Symmetry tolerance used when determining the symmetry
             inequivalent k-points on which to interpolate.
@@ -80,9 +75,6 @@ def get_kpoints_tetrahedral(
         such as energy (not vector properties such as velocity).
     """
     from tetrados.tetrahedron import get_tetrahedra
-
-    if isinstance(kpoint_mesh, (int, float)):
-        kpoint_mesh = get_kpoint_mesh(structure, kpoint_mesh)
 
     atoms = AseAtomsAdaptor().get_atoms(structure)
 
@@ -117,21 +109,6 @@ def get_kpoints_tetrahedral(
         ir_tetrahedra_to_full_idx,
         tet_weights,
     )
-
-
-def get_kpoint_mesh(structure: Structure, cutoff_length: float, force_odd: bool = True):
-    """Calculate reciprocal-space sampling with real-space cut-off."""
-    reciprocal_lattice = structure.lattice.reciprocal_lattice_crystallographic
-
-    # Get reciprocal cell vector magnitudes
-    abc_recip = np.array(reciprocal_lattice.abc)
-
-    mesh = np.ceil(abc_recip * 2 * cutoff_length).astype(int)
-
-    if force_odd:
-        mesh += (mesh + 1) % 2
-
-    return mesh
 
 
 def get_mesh_from_kpoint_diff(kpoints, tol=5e-4):
