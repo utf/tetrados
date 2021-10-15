@@ -7,10 +7,6 @@ from pymatgen.core.structure import Structure
 from pymatgen.electronic_structure.core import Spin
 from pymatgen.util.coord import pbc_diff
 
-__author__ = "Alex Ganose"
-__maintainer__ = "Alex Ganose"
-__email__ = "aganose@lbl.gov"
-
 """
      6-------7
     /|      /|
