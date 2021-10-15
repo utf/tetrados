@@ -1,5 +1,5 @@
 """
-This module contains a script for using amset from the command line.
+This module contains a script for using tetrados from the command line.
 """
 import warnings
 
@@ -7,7 +7,7 @@ import click
 from ruamel.yaml.error import MantissaNoDotYAML1_1Warning
 
 warnings.filterwarnings("ignore", category=UserWarning, module="pymatgen")
-warnings.filterwarnings("ignore", category=RuntimeWarning, module="amset")
+warnings.filterwarnings("ignore", category=RuntimeWarning, module="tetrados")
 warnings.filterwarnings("ignore", category=FutureWarning, module="scipy")
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.simplefilter("ignore", MantissaNoDotYAML1_1Warning)
