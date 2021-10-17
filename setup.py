@@ -25,7 +25,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "setuptools",
-        "click," "pymatgen",
+        "click", "pymatgen",
         "numpy",
         "spglib",
     ],
